@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_bar.dart';
+import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_modal.dart';
 import 'package:refactor_pref_service/service/ride_prefs_service.dart';
+import 'package:refactor_pref_service/utils/animations_util.dart';
  
 import '../../model/ride/ride.dart';
 import '../../model/ride_pref/ride_pref.dart';
@@ -38,11 +40,15 @@ class _RidesScreenState extends State<RidesScreen> {
 
   void onPreferencePressed() async {
         // TODO  6 : we should push the modal with the current pref
-
+        RidePreference newRidePref = await Navigator.of(context).push(AnimationUtils.createBottomToTopRoute(RidePrefModal(initRidePref: currentPreference)));
         // TODO 9 :  After pop, we should get the new current pref from the modal 
-
-        // TODO 10 :  Then we should update the service current pref,   and update the view
+        // TODO 10 :  Then we should update the service current pref, and update the view
+        RidePrefService.instance.setCurrentPreference(newRidePref);
+        setState(() {
+          currentPreference = newRidePref;
+        });
   }
+  
 
   void onFilterPressed() {
     setState(() {

@@ -3,7 +3,7 @@ import 'package:refactor_pref_service/repository/location_preferences_repository
 
 ///
 /// This is where data usually fetch from the database
-/// For now, we use mock data
+/// For now, we use
 //
 class MockLocationsRepository implements LocationsRepository {
   @override

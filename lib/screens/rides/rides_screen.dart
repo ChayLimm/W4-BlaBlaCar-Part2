@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:refactor_pref_service/repository/rides_repository.dart';
 import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_bar.dart';
+import 'package:refactor_pref_service/service/ride_prefs_service.dart';
  
-import '../../dummy_data/dummy_data.dart';
 import '../../model/ride/ride.dart';
 import '../../model/ride_pref/ride_pref.dart';
 import '../../service/rides_service.dart';
@@ -22,9 +25,13 @@ class RidesScreen extends StatefulWidget {
 
 class _RidesScreenState extends State<RidesScreen> {
  
-  RidePreference currentPreference  = fakeRidePrefs[0];   // TODO 1 :  We should get it from the service
+  RidesFilter filter = RidesFilter(false);
 
-  List<Ride> get matchingRides => RidesService.getRidesFor(currentPreference);
+  RidePreference currentPreference  = RidePrefService.instance.currentPreference!; //fakeRidePrefs[0];   // TODO 1 :  We should get it from the service
+
+  // modified usong the instance 
+  List<Ride> get matchingRides => RidesService.instance!.getRidesFor(currentPreference,filter);
+
 
   void onBackPressed() {
     Navigator.of(context).pop();     //  Back to the previous view
@@ -39,10 +46,14 @@ class _RidesScreenState extends State<RidesScreen> {
   }
 
   void onFilterPressed() {
+    setState(() {
+      // filter = newFilter;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(matchingRides.length);
     return Scaffold(
         body: Padding(
       padding: const EdgeInsets.only(

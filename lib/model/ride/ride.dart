@@ -1,5 +1,6 @@
 
 import 'package:refactor_pref_service/model/ride/locations.dart';
+import 'package:refactor_pref_service/service/rides_service.dart';
 
 import '../../utils/date_time_util.dart';
 import '../user/user.dart';
@@ -28,6 +29,8 @@ class Ride {
 
   RideStatus status = RideStatus.created;
 
+  RidesFilter ridesFilter; // added new attribute
+
   final List<User> passengers = [];
 
   Ride({
@@ -38,6 +41,7 @@ class Ride {
     required this.driver,
     required this.availableSeats,
     required this.pricePerSeat,
+    required this.ridesFilter
   });
 
   void addPassenger(User passenger) {

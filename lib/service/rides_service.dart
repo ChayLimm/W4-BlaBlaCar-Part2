@@ -45,14 +45,36 @@ class RidesService {
   ///
   ///  Return the relevant rides, given the passenger preferences
   ///
-  List<Ride> getRidesFor(RidePreference preferences, RidesFilter? filter) {
-    // For now, just a test
-    return repository.getRides(preferences, filter).where( (ride) => ride.departureLocation == preferences.departure && ride.arrivalLocation == preferences.arrival && ride.ridesFilter.acceptPets == filter!.acceptPets).toList();
-    // return availableRides.where( (ride) => ride.departureLocation == preferences.departure && ride.arrivalLocation == preferences.arrival).toList();
+  List<Ride> getRidesFor(RidePreference preferences, RidesFilter? filter, RideSortType? sortBy) { 
+    List<Ride> filteredRides = repository.getRides(preferences, filter).where(
+      (ride) => ride.departureLocation == preferences.departure &&
+                ride.arrivalLocation == preferences.arrival &&
+                (filter == null || ride.ridesFilter.acceptPets == filter.acceptPets) 
+    ).toList();
+
+    // Apply sorting logic
+    if (sortBy != null) {
+      switch (sortBy) {
+        case RideSortType.timeOfDeparture:
+          filteredRides.sort((a, b) => a.departureDate.compareTo(b.departureDate));
+          break;
+        case RideSortType.lowestPrice:
+          filteredRides.sort((a, b) => a.pricePerSeat.compareTo(b.pricePerSeat));
+          break;
+
+      }
+    }
+
+    return filteredRides;
   }
+
  
 }
 
+enum RideSortType{
+  timeOfDeparture,
+  lowestPrice;
+}
 
 class RidesFilter {
   final bool acceptPets;

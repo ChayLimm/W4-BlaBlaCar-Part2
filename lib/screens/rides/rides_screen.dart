@@ -1,7 +1,5 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:refactor_pref_service/repository/rides_repository.dart';
 import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_bar.dart';
 import 'package:refactor_pref_service/service/ride_prefs_service.dart';
  
@@ -26,11 +24,12 @@ class RidesScreen extends StatefulWidget {
 class _RidesScreenState extends State<RidesScreen> {
  
   RidesFilter filter = RidesFilter(false);
+  RideSortType sortType = RideSortType.timeOfDeparture;
 
   RidePreference currentPreference  = RidePrefService.instance.currentPreference!; //fakeRidePrefs[0];   // TODO 1 :  We should get it from the service
 
   // modified usong the instance 
-  List<Ride> get matchingRides => RidesService.instance!.getRidesFor(currentPreference,filter);
+  List<Ride> get matchingRides => RidesService.instance!.getRidesFor(currentPreference,filter,sortType);
 
 
   void onBackPressed() {

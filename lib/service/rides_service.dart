@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:refactor_pref_service/model/ride_pref/ride_pref.dart';
 import 'package:refactor_pref_service/repository/rides_repository.dart';
 
@@ -72,8 +73,12 @@ class RidesService {
 }
 
 enum RideSortType{
-  timeOfDeparture,
-  lowestPrice;
+  timeOfDeparture("Earliest departure",Icons.timelapse),
+  lowestPrice("Lowest price",Icons.monetization_on_outlined);
+
+  final String title;
+  final IconData icon;
+  const RideSortType(this.title,this.icon);
 }
 
 class RidesFilter {

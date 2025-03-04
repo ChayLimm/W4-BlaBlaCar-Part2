@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_bar.dart';
 import 'package:refactor_pref_service/screens/rides/widgets/ride_pref_modal.dart';
+import 'package:refactor_pref_service/service/filter_service.dart';
 import 'package:refactor_pref_service/service/ride_prefs_service.dart';
 import 'package:refactor_pref_service/utils/animations_util.dart';
  
@@ -25,12 +26,13 @@ class RidesScreen extends StatefulWidget {
 
 class _RidesScreenState extends State<RidesScreen> {
  
-  RidesFilter filter = RidesFilter(false);
-  RideSortType sortType = RideSortType.timeOfDeparture;
+  // initilize value by default
+  RidesFilter filter = FilterService.instance.ridesFilter ?? RidesFilter(false);
+  RideSortType sortType = FilterService.instance.rideSortType?? RideSortType.timeOfDeparture;
 
-  RidePreference currentPreference  = RidePrefService.instance.currentPreference!; //fakeRidePrefs[0];   // TODO 1 :  We should get it from the service
-
-  // modified usong the instance 
+  RidePreference currentPreference  = RidePrefService.instance.currentPreference!;   // TODO 1 :  We should get it from the service
+  
+  // get teh matching rides base on the user filtering
   List<Ride> get matchingRides => RidesService.instance!.getRidesFor(currentPreference,filter,sortType);
 
 
@@ -50,11 +52,14 @@ class _RidesScreenState extends State<RidesScreen> {
   }
   
 
-  void onFilterPressed() {
-    setState(() {
-      // filter = newFilter;
-    });
-  }
+  void onPressedFilter() {
+  // Update filter and sortType with the latest values from FilterService
+  setState(() {
+    filter = FilterService.instance.ridesFilter ?? RidesFilter(false);
+    sortType = FilterService.instance.rideSortType ?? RideSortType.timeOfDeparture;
+  });
+  print("Filter and sort type updated, screen rebuilding");
+}
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +75,7 @@ class _RidesScreenState extends State<RidesScreen> {
               ridePreference: currentPreference,
               onBackPressed: onBackPressed,
               onPreferencePressed: onPreferencePressed,
-              onFilterPressed: onFilterPressed),
+              onFilterPressed: onPressedFilter),
 
           Expanded(
             child: ListView.builder(

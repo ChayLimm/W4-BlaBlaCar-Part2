@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:refactor_pref_service/screens/ride_filter/ride_filter_screen.dart';
+import 'package:refactor_pref_service/utils/animations_util.dart';
 
 import '../../../model/ride_pref/ride_pref.dart';
 import '../../../theme/theme.dart';
@@ -56,7 +58,9 @@ class RidePrefBar extends StatelessWidget {
           // 3 - Filter button
           Padding(
             padding: const EdgeInsets.only(right: 10),
-            child: BlaTextButton(text: "Filter", onPressed: onFilterPressed),
+            child: BlaTextButton(text: "Filter", onPressed: (){
+              Navigator.of(context).push(AnimationUtils.createBottomToTopRoute(RideFilterScreen(onSubmit: onFilterPressed,)));
+            }),
           )
         ],
       ),
